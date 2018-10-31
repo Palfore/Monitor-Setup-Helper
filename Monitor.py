@@ -10,13 +10,13 @@ import itertools
 from easygui import msgbox, choicebox
 
 personal_setup = {
-	'desktop' : ('1', 'dp'),
-	'mac' : ('3', 'dp'),
-	'laptop' : ('2', 'dp'),  # You could also connect your laptop to hdmi
-	'hdmi1' : ('1', 'hdmi'),
-	'hdmi2' : ('2', 'hdmi'),
-	'hdmi3' : ('3', 'hdmi'),
-	'tbd_mdp' : ('1', 'mdp'),
+	'desktop' : (1, 'dp'),
+	'mac' : (3, 'dp'),
+	'laptop' : (2, 'dp'),  # You could also connect your laptop to hdmi
+	'hdmi1' : (1, 'hdmi'),
+	'hdmi2' : (2, 'hdmi'),
+	'hdmi3' : (3, 'hdmi'),
+	'tbd_mdp' : (1, 'mdp'),
 	"doesnt matter" : None
 }
 
@@ -33,57 +33,108 @@ def personal_setup_get(input):
 	else:
 		return input
 
-class Monitor:
 
-	@staticmethod
-	def displaying(input_types, monitor):
-		# Check monitor > 0 and < len(input_types)
-		if monitor < 0:
-			raise ValueError("Must be +")
-		if monitor >= len(input_types):
-			raise ValueError("less than")
-		
-		if monitor == 0:
-			return (monitor, input_types[monitor])
-		else:
-			if input_types[monitor] == 'mdp':  # Handle daisy chaining
-				previous_monitor, previous_input = Monitor.displaying(input_types, monitor-1)
-				if previous_input == 'dp':
-					return (previous_monitor, previous_input)
-				else:
-					return (monitor, None)  # Daisy-chaining can't work any other setup.
-			else:
-				return (monitor, input_types[monitor])
+class Cable:
+	def __init__(self, input, output):
+		self.input = input
+		self.output = output
 
-		raise ValueError("Something went horribly wrong.")
+class Device:
+	def __init__(self, name, outputs):
+		self.name = name
+		self.outputs = outputs
 
-	@staticmethod
-	def displaying_nice(arrangment, monitor):
-		temp = Monitor().displaying(arrangment, monitor  -1)
-		display = (str(int(temp[0]) + 1), temp[1])
-		return display
+class Monitor2:
+	def __init__(self, index):
+		self.index = index
+		self.inputs = ['dp', 'mpi', 'hdmi']
+
+class Connection:
+	def __init__(self, device, output, monitor, input, supports_daisy_chaining=False):
+		self.device = device
+		self.device_output = output
+		self.monitor = monitor
+		self.monitor_input = input
+		self.supports_daisy_chaining = supports_daisy_chaining
+
+cables = [
+	Cable('hdmi', 'hdmi'),
+	Cable('usb-c', 'dp'),
+	Cable('mdp', 'dp'),
+]
+
+devices = [
+	Device('desktop', ['usb-c', 'hdmi']),
+	Device('laptop', ['usb-c', 'hdmi']),
+	Device('mac', ['mdp']),
+]
 
 class Setup:
 	def __init__(self, number_of_monitors):
 		self.num_monitors = number_of_monitors
+		self.connections = [
+			Connection(devices[0], 'usb-c', 1, 'dp', supports_daisy_chaining=True),
+			Connection(devices[0], 'hdmi', 1, 'hdmi'),
+			Connection(devices[1], 'usb-c', 2, 'dp', supports_daisy_chaining=True),
+			Connection(devices[1], 'hdmi', 2, 'hdmi'),
+			Connection(devices[2], 'mdp', 3, 'dp'),
+		]
+
+	def get_connection(self, monitor, input):
+		for c in self.connections:
+			if (c.monitor == monitor) and (c.monitor_input == input):
+				return c
+		raise ValueError("Could not find that connection: ", monitor, input)
+
+	def what_is_displayed(self, input_types, monitor):
+		''' input_types are the current input-sources on each monitor: ['hdmi, 'dp', 'mdp'] 
+			This will output what is being displayed, for example if monitor 3 is requested:
+			it would output (2, 'dp') indicating it is showing the displayport output from monitor 1.
+			Also returns (-, -, 'made use of daisy chaining')
+		'''
+		def get_input(monitor):
+			''' Provides indexing without confusing 'previous monitor' for monitor - 1. '''
+			return input_types[monitor - 1]
+
+		if monitor < 1:
+			raise ValueError("Must be +")
+		if monitor > len(input_types):
+			raise ValueError("less than")
+		
+		if monitor != 1:
+			if get_input(monitor) == 'mdp':  # Handle daisy chaining
+				previous_monitor, previous_input, _ = self.what_is_displayed(input_types, monitor-1)
+				if previous_input == 'dp':
+					if self.get_connection(previous_monitor, 'dp').supports_daisy_chaining:
+						return (previous_monitor, previous_input, True)
+				return (monitor, None, False)  # Daisy-chaining can't work any other setup.
+
+		return (monitor, get_input(monitor), False)
+
 
 	def whole_display(self, arrangment):
 		# assert arremgnts size is number of moitores
-		return [Monitor.displaying_nice(arrangment, i) for i in range(1, self.num_monitors+1)]
+		return [self.what_is_displayed(arrangment, i) for i in range(1, self.num_monitors+1)]
 
 	def how_to_get(self, users_request):
 		request = [personal_setup_get(r.lower()) for r in users_request]
+
+		# All possible monitor input-sources
 		configurations = []
 		for arrangment in itertools.product(['hdmi', 'mdp', 'dp'], repeat=3):
 			configurations.append((arrangment, self.whole_display(arrangment)))
 
-		# lengths of  num_monitors == request == output
+		# check lengths of  num_monitors == request == output
+		# imporove this to use self.connections and (global) cables otherwise it isn't accurate.
+		# because multiple connections may exists and are not captured here.
 		possible_input_types = []
 		for inputs, outputs in configurations:
-			if all(not request[i] or (request[i] == outputs[i]) for i in range(self.num_monitors)):
-				possible_input_types.append(inputs)
-
-		# Output if daisy chaining and from where to where
+			print(inputs, outputs, request)
+			if all(not request[i] or (request[i][0] == outputs[i][0] and request[i][1] == outputs[i][1]) for i in range(self.num_monitors)):
+				daisy_chained = ['M' + str(i+1) + ' to M' + str(i) for i, o in enumerate(outputs) if o[2]]
+				message = 'by chaining ' + ' and '.join(list(reversed(daisy_chained)))
+				this_input = (inputs, message) if any([o[2] for o in outputs]) else inputs
+				possible_input_types.append(this_input)
 
 		response = 'To get: ' + str(users_request) + '\n'
 		if not possible_input_types:
