@@ -1,5 +1,12 @@
 from easygui import msgbox, choicebox, exceptionbox, ynbox
 from user import UsersStuff
+from solver import Solver
+
+import os
+import time
+
+import subprocess
+import sys
 
 DEVICES = UsersStuff.devices
 MONITORS = UsersStuff.monitors
@@ -8,10 +15,14 @@ CONNECTIONS = UsersStuff.connections
 
 def change_input_sources(input_sources):
 	def execute_monitor_command(command):
-		print(f"ddm.exe {command}")
-		#os.system(f"ddm.exe {command}")
-	for i, source in enumerate(input_sources):
-		execute_monitor_command(f"/{i}setActiveInput {source.upper()}")
+		full_command = f"ddm.exe {command}"
+		print(f"Executing: {full_command.split(' ')}")
+		subprocess.Popen(full_command.split(' '), shell=True)
+		time.sleep(3)
+	for i, source in reversed(list(enumerate(input_sources))): # Do primary last
+		source = source.upper().replace("'", '').strip()
+		execute_monitor_command(f"{i+1}:SetActiveInput {source}")
+	execute_monitor_command("Exit")
 
 
 def summary(desired_display):

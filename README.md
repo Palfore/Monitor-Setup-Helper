@@ -4,6 +4,12 @@ Simulates the Connections between Devices and Monitors
 This script asks the user which inputs they would like to see on their monitors, and provides
 them with the appropriate settings (possibly changing them appropriately).
 
+# Installation:
+	1) The user must install python3.
+		https://www.python.org/downloads/
+	2) The user must install easygui.
+		http://easygui.sourceforge.net/sourceforge_site_as_of_2014_11_21/download/version_0.96/index.html
+
 # Assumptions:
 	1) The user's monitors are setup as follows.
 		[Monitor 1] - dp_out -> [Monitor 2] - dp_out -> ... -> [Monitor n (mst-off)]
@@ -21,6 +27,11 @@ them with the appropriate settings (possibly changing them appropriately).
 	** Note that due to daisy-chaining this is not just the input_source.
 
 # Limitations:
+	0) The Dell Display Manager (DDM.exe) can only affect monitors that are displaying 
+		the device executing it. Eg: If display2 is showing a mac, and display1 is showing a windows pc,
+		the windows pc would be unable to automatically affect the mac display (display2).
+
+	   Futhermore, this software is (unfortunely) unable for macOS).
 	1) Doesn't handle asking for nothing to be displayed on a monitor.
 	2) Devices are not limited to the number of monitors they can output to, or daisy-chain to.
 		This would only be an issue for older devices connecting to more than 3 monitors.

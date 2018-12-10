@@ -7,6 +7,7 @@ class UsersStuff:
 		Cable('hdmi', 'hdmi'),
 		Cable('usbc', 'dp', supports_daisy_chaining=CAN_DAISY_CHAIN),
 		Cable('mdp', 'dp'),
+		Cable('mdp', 'hdmi')
 	]
 
 	devices = {
@@ -16,7 +17,7 @@ class UsersStuff:
 		'xbox': Device('xbox', ['hdmi'], supports_daisy_chaining=CANNOT_DAISY_CHAIN)
 	}
 
-	monitors = (
+	monitors = (  # maybe unoccupied should say unavailable
 		Monitor(0, ports=(('dp', UNOCCUPIED), ('mdp', UNOCCUPIED), ('hdmi', UNOCCUPIED))),
 		Monitor(1, ports=(('dp', UNOCCUPIED), ('mdp', OCCUPIED), ('hdmi', UNOCCUPIED))),
 		#Monitor(2, ports=(('dp', UNOCCUPIED), ('mdp', OCCUPIED), ('hdmi', UNOCCUPIED))),
@@ -25,7 +26,7 @@ class UsersStuff:
 	connections = (
 		#('desktop', 'usbc', 0, 'dp'),
 		('laptop', 'usbc', 0, 'dp'),
-		('mac', 'mdp', 1, 'dp'),
+		('mac', 'mdp', 1, 'hdmi'),
 		(None, 'hdmi', 0, 'hdmi'),
 		(None, 'hdmi', 1, 'hdmi'),
 		#(None, 'hdmi', 2, 'hdmi'),
