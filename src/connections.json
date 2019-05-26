@@ -1,0 +1,26 @@
+[
+    [
+        "laptop",
+        "usb-c",
+        "monitor2",
+        "dp"
+    ],
+    [
+        "mac",
+        "mdp",
+        "monitor3",
+        "hdmi"
+    ],
+    [
+        "monitor2",
+        "dp",
+        "monitor3",
+        "mdp"
+    ],
+    [
+        "monitor3",
+        "dp",
+        "monitor1",
+        "mdp"
+    ]
+]

@@ -1,19 +1,24 @@
 # Monitor-Setup-Helper
-Simulates the Connections between Devices and Monitors
+Do you stuggle to manager multiple monitors and multiple devices?
+Well no longer!
 
-This script asks the user which inputs they would like to see on their monitors, and provides
-them with the appropriate settings (possibly changing them appropriately).
+This application let's you easily manage which devices get displayed on which monitors!
+
+![Image of GUI](Screenshot_1.png)
+1) The top "Flash" panel lets you identify the serial number for each monitor so the program knows which monitor is which.
+2) The middle section shows you which connections you have, and lets you pick which device gets displayed on each monitor.
+3) Finally, the bottom section allows you to execute the change to display those devices.
 
 # Installation:
 	1) The user must install python3.
 		https://www.python.org/downloads/
-	2) The user must install easygui.
+	2) The user must install easygui. [Outdated, they need tkinter]
 		http://easygui.sourceforge.net/sourceforge_site_as_of_2014_11_21/download/version_0.96/index.html
 
 # Assumptions:
 	1) The user's monitors are setup as follows.
 		[Monitor 1] - dp_out -> [Monitor 2] - dp_out -> ... -> [Monitor n (mst-off)]
-	
+
 # Definitions:
 	0) daisy-chaining: The act of passing the output of one monitor into another to display one device on multiple monitors.
 	1) monitor = monitor_index: Refers to the enumerated index of the monitor. *
@@ -27,7 +32,7 @@ them with the appropriate settings (possibly changing them appropriately).
 	** Note that due to daisy-chaining this is not just the input_source.
 
 # Limitations:
-	0) The Dell Display Manager (DDM.exe) can only affect monitors that are displaying 
+	0) The Dell Display Manager (DDM.exe) can only affect monitors that are displaying
 		the device executing it. Eg: If display2 is showing a mac, and display1 is showing a windows pc,
 		the windows pc would be unable to automatically affect the mac display (display2).
 

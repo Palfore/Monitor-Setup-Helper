@@ -1,0 +1,20 @@
+{
+    "CABLES": [
+        [
+            "hdmi",
+            "hdmi"
+        ],
+        [
+            "usb-c",
+            "dp"
+        ],
+        [
+            "mdp",
+            "dp"
+        ],
+        [
+            "mdp",
+            "hdmi"
+        ]
+    ]
+}

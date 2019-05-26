@@ -1,0 +1,101 @@
+{
+    "laptop": {
+        "name": "laptop",
+        "inputs": [],
+        "outputs": [
+            {
+                "kind": "usb-c",
+                "used": null
+            },
+            {
+                "kind": "hdmi",
+                "used": null
+            }
+        ]
+    },
+    "mac": {
+        "name": "mac",
+        "inputs": [],
+        "outputs": [
+            {
+                "kind": "mdp",
+                "used": null
+            }
+        ]
+    },
+    "monitor1": {
+        "name": "monitor1",
+        "serial": "XVNNT8BGABNL",
+        "inputs": [
+            {
+                "kind": "hdmi",
+                "used": null
+            },
+            {
+                "kind": "dp",
+                "used": null
+            },
+            {
+                "kind": "mdp",
+                "used": null
+            }
+        ],
+        "outputs": [
+            {
+                "kind": "dp",
+                "used": null
+            }
+        ],
+        "watching": "mdp"
+    },
+    "monitor2": {
+        "name": "monitor2",
+        "serial": "XVNNT73IBNEL",
+        "inputs": [
+            {
+                "kind": "hdmi",
+                "used": null
+            },
+            {
+                "kind": "dp",
+                "used": null
+            },
+            {
+                "kind": "mdp",
+                "used": null
+            }
+        ],
+        "outputs": [
+            {
+                "kind": "dp",
+                "used": null
+            }
+        ],
+        "watching": "dp"
+    },
+    "monitor3": {
+        "name": "monitor3",
+        "serial": "XVNNT88SA0KL",
+        "inputs": [
+            {
+                "kind": "hdmi",
+                "used": null
+            },
+            {
+                "kind": "dp",
+                "used": null
+            },
+            {
+                "kind": "mdp",
+                "used": null
+            }
+        ],
+        "outputs": [
+            {
+                "kind": "dp",
+                "used": null
+            }
+        ],
+        "watching": "mdp"
+    }
+}
