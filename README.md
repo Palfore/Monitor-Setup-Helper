@@ -37,28 +37,28 @@ Here is a UML diagram for the daisy chaining algorithm I developped to figure ou
 			> You can add or remove cables that exist / you have by adding/removing:
 				[
 					"portA",
-	            	"portB"
-	        	],
+	            			"portB"
+	        		],
 		b) connections.json
 			> You can add or remove connections by adding/removing:
 				[
-			        "deviceA",
-			        "output_port_of_deviceA",
-			        "deviceB",
-			        "input_port_of_deviceB"
-			    ],
+			        	"deviceA",
+			        	"output_port_of_deviceA",
+			        	"deviceB",
+			        	"input_port_of_deviceB"
+			    	],
 		   where deviceB is generally a monitor.
 
 
 		c) devices.json
 			> You can add or remove devices by adding/removing:
 				"deviceName": {
-			        "name": "deviceName",
-			        "inputs": [],
-			        "outputs": [
-			            "mdp"
-			        ]
-			    },
+			        	"name": "deviceName",
+			        	"inputs": [],
+			        	"outputs": [
+			            		"mdp"
+			        	]
+			    	},
 			> You can add or remove monitors by adding/removing:
 			    "monitor1": {
 			        "name": "monitor1",
