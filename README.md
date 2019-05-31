@@ -56,10 +56,7 @@ Here is a UML diagram for the daisy chaining algorithm I developped to figure ou
 			        "name": "deviceName",
 			        "inputs": [],
 			        "outputs": [
-			            {
-			                "kind": "mdp",
-			                "used": null
-			            }
+			            "mdp"
 			        ]
 			    },
 			> You can add or remove monitors by adding/removing:
@@ -67,26 +64,16 @@ Here is a UML diagram for the daisy chaining algorithm I developped to figure ou
 			        "name": "monitor1",
 			        "serial": null,
 			        "inputs": [
-			            {
-			                "kind": "hdmi",
-			                "used": null
-			            },
-			            {
-			                "kind": "dp",
-			                "used": null
-			            }
+			             "hdmi",
+			             "dp"
 			        ],
 			        "outputs": [
-			            {
-			                "kind": "dp",
-			                "used": null
-			            }
+			            "dp"
 			        ],
 			        "watching": "mdp"
 			    },
 			Note:
-				i) "used" should always be null.
-				ii) Serial numbers can start as null, but even if you have dell monitors,
+				i) Serial numbers can start as null, but even if you have dell monitors,
 					the program that can automatically change the displays for you wont
 					be able to affect them. To determine the serial number, run the gui
 					with the serial as null, the click the flash at the top of the gui.
@@ -95,7 +82,7 @@ Here is a UML diagram for the daisy chaining algorithm I developped to figure ou
 
 					This might seem tedious, but there is no other way for the computer to
 					know which monitors your hand-picked names correspond to.
-				iii) Its probably easiest just to copy-paste and modify the existing json files.
+				ii) Its probably easiest just to copy-paste and modify the existing json files.
 
 # Assumptions:
 	1) The user's monitors are setup as follows.
