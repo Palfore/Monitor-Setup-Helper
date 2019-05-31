@@ -4,55 +4,132 @@ Well no longer!
 
 This application let's you easily manage which devices get displayed on which monitors!
 
-![Image of GUI](Screenshot_1.png)
-1) The top "Flash" panel lets you identify the serial number for each monitor so the program knows which monitor is which.
-2) The middle section shows you which connections you have, and lets you pick which device gets displayed on each monitor.
-3) Finally, the bottom section allows you to execute the change to display those devices.
+![Image of GUI](main_screen.png)
+In the above picture, you see the three serial numbers of my monitors that the program uses to automatically change their settings. Beneath that you see all my device connections. You can also see that I'm requesting that each monitor displays my laptop, and in the bottom it displays the input sources that my monitors need to be set to to make this happen. If I click Apply Choice, the Dell Display Manager will automatically change the sources for me. Now if I want Monitor3 to display my mac, it only takes 3 clicks and dito for going back!
 
-# Installation:
+
+The gui can be broken down into three sections:
+
+	1) The top "Flash" panel lets you identify the serial number for
+		each monitor so the program knows which monitor is which.
+
+	2) The middle section uses arrows to show which ports are connected.
+		 It also lets you pick which device gets displayed on each monitor.
+
+	3) Finally, the bottom section allows you to execute the change to display those
+		devices (assuming you have dell monitors compatiable with the Dell Display Manager,
+		otherwise this still provides you with the inputs that you can manually set).
+
+
+Here is a UML diagram for the daisy chaining algorithm I developped to figure out what a monitor displays (which was a big part of this!):
+![UML Diagram for Daisy Chaining](DaisyChainingAlgorithm.png)
+
+
+
+# Installation & Usage:
 	1) The user must install python3.
 		https://www.python.org/downloads/
-	2) The user must install easygui. [Outdated, they need tkinter]
-		http://easygui.sourceforge.net/sourceforge_site_as_of_2014_11_21/download/version_0.96/index.html
+	2) The gui either by running "Monitor Switcher.bat" or "src/gui.pyw".
+	3) Right now, the user has to be comfortable with manipulating the .json files
+		to change their setup. In the folder "json" there are 3 files:
+
+		a) cables.json
+			> You can add or remove cables that exist / you have by adding/removing:
+				[
+					"portA",
+	            	"portB"
+	        	],
+		b) connections.json
+			> You can add or remove connections by adding/removing:
+				[
+			        "deviceA",
+			        "output_port_of_deviceA",
+			        "deviceB",
+			        "input_port_of_deviceB"
+			    ],
+		   where deviceB is generally a monitor.
+
+
+		c) devices.json
+			> You can add or remove devices by adding/removing:
+				"deviceName": {
+			        "name": "deviceName",
+			        "inputs": [],
+			        "outputs": [
+			            {
+			                "kind": "mdp",
+			                "used": null
+			            }
+			        ]
+			    },
+			> You can add or remove monitors by adding/removing:
+			    "monitor1": {
+			        "name": "monitor1",
+			        "serial": null,
+			        "inputs": [
+			            {
+			                "kind": "hdmi",
+			                "used": null
+			            },
+			            {
+			                "kind": "dp",
+			                "used": null
+			            }
+			        ],
+			        "outputs": [
+			            {
+			                "kind": "dp",
+			                "used": null
+			            }
+			        ],
+			        "watching": "mdp"
+			    },
+			Note:
+				i) "used" should always be null.
+				ii) Serial numbers can start as null, but even if you have dell monitors,
+					the program that can automatically change the displays for you wont
+					be able to affect them. To determine the serial number, run the gui
+					with the serial as null, the click the flash at the top of the gui.
+					The monitor with that serial number will flash, then just copy and
+					replace the null placeholder in the json file.
+
+					This might seem tedious, but there is no other way for the computer to
+					know which monitors your hand-picked names correspond to.
+				iii) Its probably easiest just to copy-paste and modify the existing json files.
 
 # Assumptions:
 	1) The user's monitors are setup as follows.
 		[Monitor 1] - dp_out -> [Monitor 2] - dp_out -> ... -> [Monitor n (mst-off)]
-
-# Definitions:
-	0) daisy-chaining: The act of passing the output of one monitor into another to display one device on multiple monitors.
-	1) monitor = monitor_index: Refers to the enumerated index of the monitor. *
-	2) monitor_inputs: The input_port of the monitor.
-	3) input_source = monitor_input_source: The monitor setting which selects which monitor_input to display.
-	4) monitor_output: The monitor_input being displayed on a given monitor. **
-	5) monitor_devices = monitor_displayed_devices: The actual device being displayed on the monitor. **
-
-
-	* Note that there is the programatic [0, n] and user-friendly [1, n-1].
-	** Note that due to daisy-chaining this is not just the input_source.
+	2) Since a monitor can daisy chain dp and mdp inputs, and since chains can pass through
+		a monitor that has its input source set to a non-daisy-chain capable source, there
+		is an ambiguity as to which of those two sources gets passed along. I assume DP has
+		priority over mDP.
 
 # Limitations:
-	0) The Dell Display Manager (DDM.exe) can only affect monitors that are displaying
-		the device executing it. Eg: If display2 is showing a mac, and display1 is showing a windows pc,
+	1) The Dell Display Manager (DDM.exe) can only affect monitors that are displaying
+		the device executing it. Eg: If display2 is showing a mac, and display1 is showing a
+		windows pc,
 		the windows pc would be unable to automatically affect the mac display (display2).
 
-	   Futhermore, this software is (unfortunely) unable for macOS).
-	1) Doesn't handle asking for nothing to be displayed on a monitor.
-	2) Devices are not limited to the number of monitors they can output to, or daisy-chain to.
-		This would only be an issue for older devices connecting to more than 3 monitors.
+	   Futhermore, this software is (unfortunely) unable for macOS AND only available for
+	   dell monitors. It's possible that other monitors have a similar software that can be
+	   added (easily) as an extension.
+	2) Devices are unrealistically not limited to the number of monitors they can
+		daisy-chain to.
+	3) Testing has only taken place for my configuration since that is the only thing I can
+	 	know for sure. I've also done some brief testing for 4 monitors to check the
+	 	daisy-chaining algorithm. And there are probably biases from only having one setup
+	 	(specifically 1 monitor type) to work with.
+	4) All devices need to have unique names. I haven't tested whether multiple inputs can
+	 	have the same name, eg: hdmi hdmi or if they should be unique: hdmi1 hdmi2.
 
 # Improvements:
-	1) If Dell Display Manager (ddm.exe) is installed, automatically change the configuration.
-	2) Could use ddm.exe to automatically generate display configurations (number of monitors, ports, ...)
-	3) The ability to daisy-chain is embeded in UsersStuff.devices, where as it should be the actual port of the device.
-	4) Add unit tests
-	5) Improve documentation & user guide
-	6) Add gui for changing UsersStuff (and save to file)
-	7) Create setup.py
-
-
-
-
-
+	1) Could ddm.exe be used to automatically generate display configurations (number of
+		monitors, ports, ...)?
+	2) Add gui functionality for:
+		> Changing Connections, Devices
+		> Changing global and local brightness and contrast.
+	3) This is my second gui (apart from html-js stuff) so that code is not great...
+	4) The user has to resize the window if they have too many devices.
 
 

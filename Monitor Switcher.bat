@@ -1,1 +1,1 @@
-python "%~dp0\main.py" %*
+start pythonw "%~dp0\src\gui.pyw" %*

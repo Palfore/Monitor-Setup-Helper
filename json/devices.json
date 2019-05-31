@@ -1,0 +1,56 @@
+{
+    "laptop": {
+        "name": "laptop",
+        "inputs": [],
+        "outputs": [
+            "usb-c",
+            "hdmi"
+        ]
+    },
+    "mac": {
+        "name": "mac",
+        "inputs": [],
+        "outputs": [
+            "mdp"
+        ]
+    },
+    "monitor1": {
+        "name": "monitor1",
+        "inputs": [
+            "hdmi",
+            "dp",
+            "mdp"
+        ],
+        "outputs": [
+            "dp"
+        ],
+        "watching": "mdp",
+        "serial": "XVNNT8BGABNL"
+    },
+    "monitor2": {
+        "name": "monitor2",
+        "inputs": [
+            "hdmi",
+            "dp",
+            "mdp"
+        ],
+        "outputs": [
+            "dp"
+        ],
+        "watching": "dp",
+        "serial": "XVNNT73IBNEL"
+    },
+    "monitor3": {
+        "name": "monitor3",
+        "inputs": [
+            "hdmi",
+            "dp",
+            "mdp"
+        ],
+        "outputs": [
+            "dp"
+        ],
+        "watching": "mdp",
+        "serial": "XVNNT88SA0KL"
+    }
+}
