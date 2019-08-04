@@ -112,6 +112,9 @@ DecControl X Y - decreases the value of control X by Y
 Zoom - switches between PxP and fullscreen mode
 Wait X - pause X milliseconds
 Exit - terminates the program
+
+[Nawar] -> For *Control Functions, sections 7 & 8(more useful) 
+in mccs.pdf are relevant
  
 Some of these commands require familiarity with the MCCS
 standard. For example, on monitors that support it the 

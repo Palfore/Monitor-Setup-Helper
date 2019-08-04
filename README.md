@@ -15,10 +15,13 @@ The gui can be broken down into three sections:
 
 	2) The middle section uses arrows to show which ports are connected.
 		 It also lets you pick which device gets displayed on each monitor.
+		 Additionally, the brightness and contrast for each monitor can be updated.
 
 	3) Finally, the bottom section allows you to execute the change to display those
 		devices (assuming you have dell monitors compatiable with the Dell Display Manager,
 		otherwise this still provides you with the inputs that you can manually set).
+		Additionally, the brightness and contrast for all monitors can be updated.
+		The monitor's displays may also be turned off/on (tapping physical monitor buttons will turn them back on)
 
 
 Here is a UML diagram for the daisy chaining algorithm I developped to figure out what a monitor displays (which was a big part of this!):
@@ -95,10 +98,9 @@ Here is a UML diagram for the daisy chaining algorithm I developped to figure ou
 # Limitations:
 	1) The Dell Display Manager (DDM.exe) can only affect monitors that are displaying
 		the device executing it. Eg: If display2 is showing a mac, and display1 is showing a
-		windows pc,
-		the windows pc would be unable to automatically affect the mac display (display2).
+		windows pc, the windows pc would be unable to automatically affect the mac display (display2).
 
-	   Futhermore, this software is (unfortunely) unable for macOS AND only available for
+	   Futhermore, this software is (unfortunately) unavailable for macOS AND only available for
 	   dell monitors. It's possible that other monitors have a similar software that can be
 	   added (easily) as an extension.
 	2) Devices are unrealistically not limited to the number of monitors they can
@@ -112,11 +114,12 @@ Here is a UML diagram for the daisy chaining algorithm I developped to figure ou
 
 # Improvements:
 	1) Could ddm.exe be used to automatically generate display configurations (number of
-		monitors, ports, ...)?
+		monitors, ports, ...)? So the user wouldn't have to.
 	2) Add gui functionality for:
 		> Changing Connections, Devices
-		> Changing global and local brightness and contrast.
 	3) This is my second gui (apart from html-js stuff) so that code is not great...
-	4) The user has to resize the window if they have too many devices.
+		There may be python libraries that use a similar style.
+	4) The user has to resize the window if they have too many devices. But the bg color
+		doesn't fill on resize.
 
 

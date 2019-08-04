@@ -1,7 +1,19 @@
 """ A wrapper class for the Dell Display Manager (DDM) executable. """
 
-import os
+import subprocess
 import time
+import os
+
+def batch_commands(serials, command):
+	command = ' '.join([f"/{serial}:" + command for serial in serials])
+	command = f"{DDM.EXECUTABLE} {command} \\exit"
+	print(command)
+	os.system(command)
+
+
+class VCP_CODES:
+	brightness = '10'
+	contrast = '12'
 
 class DDM:
 	EXECUTABLE = os.path.join(os.path.dirname(os.path.realpath(__file__)),
@@ -14,10 +26,10 @@ class DDM:
 
 	def execute(self, command):
 		command = f"/{self.serial}:" + command
-		print(f"{DDM.EXECUTABLE} {command}")
 		if not self.disable_execution:
-			os.system(f"{DDM.EXECUTABLE} {command}")
-			time.sleep(1)  # ddm.exe seems to 'jam' if commands are too quick.
+			command = f"{DDM.EXECUTABLE} {command} \\exit"
+			print(command)
+			os.system(command)
 
 	def setSource(self, source):
 		self.execute(f"SetActiveInput {source}")
@@ -30,6 +42,22 @@ class DDM:
 		""" 0 < contrast < 100 """
 		self.execute(f"SetBrightnessLevel {brightness}")
 
-	def flash(self):
+	def changeBrightness(self, amount=1):
+		""" 0 < contrast < 100 """
+		control = ("Inc" if amount > 0 else "Dec") + "Control"
+		self.execute(f"{control} {VCP_CODES.brightness} {abs(amount)}")
+
+	def changeContrast(self, amount=1):
+		""" 0 < contrast < 100 """
+		control = ("Inc" if amount > 0 else "Dec") + "Control"
+		self.execute(f"{control} {VCP_CODES.contrast} {abs(amount)}")
+
+	def sleep(self):
 		self.execute("SetPowerMode Off")
+
+	def wake(self):
 		self.execute("SetPowerMode On")
+
+	def flash(self):
+		self.sleep()
+		self.wake()

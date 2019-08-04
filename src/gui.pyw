@@ -6,7 +6,7 @@ import tkinter as tk
 import tkinter.messagebox as messagebox
 
 from solver import find_configuration
-from ddm import DDM
+from ddm import DDM, batch_commands
 
 from numpy import arange
 import numpy as np
@@ -21,7 +21,7 @@ GET_MONITOR_SCRIPT_PATH = os.path.join(THIS_SCRIPT_PATH,
 
 LARGE_FONT = ("Verdana", 18)
 BOLD_FONT = 'Helvetica 8 bold'
-WIDTH = 1200
+WIDTH = 1500
 HEIGHT = 800
 
 def probe_bbox(canvas, x, y, element):
@@ -76,7 +76,36 @@ class StartPage:
 		dw, dh = place_element(canvas, 50, 500, submit)
 
 		self.output = tk.Listbox(self.master, width=100, selectmode='single')
-		place_element(canvas, 50, 500+dh, self.output)
+		_, dh2 = place_element(canvas, 50, 500+dh, self.output)
+
+		submit = ttk.Button(self.master, text=f"Sleep",
+			command=lambda :[DDM(serial).sleep() for serial in get_attached_monitor_serial_numbers()])
+		place_element(canvas, 25, 500+dh+dh2+20, submit)
+		submit = ttk.Button(self.master, text=f"Wake",
+			command=lambda :[DDM(serial).wake() for serial in get_attached_monitor_serial_numbers()])
+		place_element(canvas, 125, 500+dh+dh2+20, submit)
+
+		submit = ttk.Button(self.master, text=f"b^All",
+			command=lambda: batch_commands(get_attached_monitor_serial_numbers(), "IncControl 10 A"))
+		place_element(canvas, 250, 500+dh+dh2+20, submit)
+		submit = ttk.Button(self.master, text=f"bvAll",
+			command=lambda: batch_commands(get_attached_monitor_serial_numbers(), "DecControl 10 A"))
+		place_element(canvas, 350, 500+dh+dh2+20, submit)
+
+		submit = ttk.Button(self.master, text=f"c^All",
+			command=lambda: batch_commands(get_attached_monitor_serial_numbers(), "IncControl 12 A"))
+		place_element(canvas, 475, 500+dh+dh2+20, submit)
+		submit = ttk.Button(self.master, text=f"cvAll",
+			command=lambda: batch_commands(get_attached_monitor_serial_numbers(), "DecControl 12 A"))
+		place_element(canvas, 575, 500+dh+dh2+20, submit)
+
+		submit = ttk.Button(self.master, text=f"b50All",
+			command=lambda: batch_commands(get_attached_monitor_serial_numbers(), "SetControl 10 32"))
+		place_element(canvas, 700, 500+dh+dh2+20, submit)
+		submit = ttk.Button(self.master, text=f"c50All",
+			command=lambda: batch_commands(get_attached_monitor_serial_numbers(), "SetControl 12 32"))
+		place_element(canvas, 800, 500+dh+dh2+20, submit)
+
 
 		w = 50
 		for serial in get_attached_monitor_serial_numbers():
@@ -103,6 +132,29 @@ class StartPage:
 			monitor_w, monitor_h = place_element(canvas, x, y+monitor_h, option)
 
 			positions = {}
+
+			# Options
+			total_width = 0  # Determine Size
+			button_texts = {
+				'b^': lambda : DDM(monitor.serial).changeBrightness(10),
+				'bv': lambda : DDM(monitor.serial).changeBrightness(-10),
+				'c^': lambda : DDM(monitor.serial).changeContrast(10),
+				'cv': lambda : DDM(monitor.serial).changeContrast(-10),
+			}
+			for text in button_texts.keys():
+				button = ttk.Button(self.master, text=text)
+				button.config(width=3)
+				w, h = probe_bbox(canvas, x, y, button)
+				total_width += w
+
+			width = 0  # Draw
+			for text, func in button_texts.items():
+				button = ttk.Button(self.master, text=text,
+					command=func)
+				button.config(width=3)
+				X, Y = x+width-total_width/2+monitor_w/2, y+h-padding+-2*monitor_h
+				w, h = place_element(canvas, X, Y, button)
+				width += w
 
 			# Inputs
 			total_width = 0  # Determine Size
