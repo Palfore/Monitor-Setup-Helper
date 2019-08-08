@@ -1,8 +1,8 @@
 # Triple M
-Do you stuggle to manager multiple monitors and multiple devices?
+Do you stuggle to manage multiple monitors connected to multiple devices?
 Well no longer!
 
-This application let's you easily manage which devices get displayed on which monitors!
+This application lets you easily manage which devices get displayed on which monitors!
 
 ![Image of GUI](main_screen.png)
 In the above picture, you see the three serial numbers of my monitors that the program uses to automatically change their settings. Beneath that you see all my device connections. You can also see that I'm requesting that each monitor displays my laptop, and in the bottom it displays the input sources that my monitors need to be set to to make this happen. If I click Apply Choice, the Dell Display Manager will automatically change the sources for me. Now if I want Monitor3 to display my mac, it only takes 3 clicks and dito for going back!
