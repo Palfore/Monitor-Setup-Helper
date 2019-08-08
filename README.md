@@ -1,4 +1,4 @@
-# Monitor-Setup-Helper
+# Triple M
 Do you stuggle to manager multiple monitors and multiple devices?
 Well no longer!
 
