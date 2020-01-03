@@ -1,30 +1,30 @@
 # Triple M
-Do you stuggle to manage multiple monitors connected to multiple devices?
+Do you struggle to manage multiple monitors connected to multiple devices?
 Well no longer!
 
 This application lets you easily manage which devices get displayed on which monitors!
 
 ![Image of GUI](main_screen.png)
-In the above picture, you see the three serial numbers of my monitors that the program uses to automatically change their settings. Beneath that you see all my device connections. You can also see that I'm requesting that each monitor displays my laptop, and in the bottom it displays the input sources that my monitors need to be set to to make this happen. If I click Apply Choice, the Dell Display Manager will automatically change the sources for me. Now if I want Monitor3 to display my mac, it only takes 3 clicks and dito for going back!
+In the above picture, you see the three serial numbers of my monitors that the program uses to automatically change their settings. Beneath that you see all my device connections. You can also see that I'm requesting that each monitor displays my laptop, and in the bottom it displays the input sources that my monitors need to be set to make this happen. If I click Apply Choice, the Dell Display Manager will automatically change the sources for me. Now if I want Monitor3 to display my mac, it only takes 3 clicks!
 
 
 The gui can be broken down into three sections:
 
 	1) The top "Flash" panel lets you identify the serial number for
-		each monitor so the program knows which monitor is which.
+		each monitor so the program can associate the programmed monitor with the physical one .
 
 	2) The middle section uses arrows to show which ports are connected.
 		 It also lets you pick which device gets displayed on each monitor.
 		 Additionally, the brightness and contrast for each monitor can be updated.
 
 	3) Finally, the bottom section allows you to execute the change to display those
-		devices (assuming you have dell monitors compatiable with the Dell Display Manager,
+		devices (assuming you have dell monitors compatible with the Dell Display Manager,
 		otherwise this still provides you with the inputs that you can manually set).
 		Additionally, the brightness and contrast for all monitors can be updated.
 		The monitor's displays may also be turned off/on (tapping physical monitor buttons will turn them back on)
 
 
-Here is a UML diagram for the daisy chaining algorithm I developped to figure out what a monitor displays (which was a big part of this!):
+Here is a UML diagram for the daisy chaining algorithm I developed to figure out what a monitor displays (which was a big part of this!):
 ![UML Diagram for Daisy Chaining](DaisyChainingAlgorithm.png)
 
 
@@ -92,15 +92,15 @@ Here is a UML diagram for the daisy chaining algorithm I developped to figure ou
 		[Monitor 1] - dp_out -> [Monitor 2] - dp_out -> ... -> [Monitor n (mst-off)]
 	2) Since a monitor can daisy chain dp and mdp inputs, and since chains can pass through
 		a monitor that has its input source set to a non-daisy-chain capable source, there
-		is an ambiguity as to which of those two sources gets passed along. I assume DP has
-		priority over mDP.
+		is an ambiguity as to which of those two sources gets passed through. I assume DP has
+		priority over mdp.
 
 # Limitations:
 	1) The Dell Display Manager (DDM.exe) can only affect monitors that are displaying
 		the device executing it. Eg: If display2 is showing a mac, and display1 is showing a
 		windows pc, the windows pc would be unable to automatically affect the mac display (display2).
 
-	   Futhermore, this software is (unfortunately) unavailable for macOS AND only available for
+	   Furthermore, this software is (unfortunately) unavailable for macOS AND only available for
 	   dell monitors. It's possible that other monitors have a similar software that can be
 	   added (easily) as an extension.
 	2) Devices are unrealistically not limited to the number of monitors they can
@@ -108,13 +108,13 @@ Here is a UML diagram for the daisy chaining algorithm I developped to figure ou
 	3) Testing has only taken place for my configuration since that is the only thing I can
 	 	know for sure. I've also done some brief testing for 4 monitors to check the
 	 	daisy-chaining algorithm. And there are probably biases from only having one setup
-	 	(specifically 1 monitor type) to work with.
+	 	(specifically, 1 monitor type) to work with.
 	4) All devices need to have unique names. I haven't tested whether multiple inputs can
 	 	have the same name, eg: hdmi hdmi or if they should be unique: hdmi1 hdmi2.
 
 # Improvements:
 	1) Could ddm.exe be used to automatically generate display configurations (number of
-		monitors, ports, ...)? So the user wouldn't have to.
+		monitors, ports, ...)? Then the user wouldn't have to.
 	2) Add gui functionality for:
 		> Changing Connections, Devices
 	3) This is my second gui (apart from html-js stuff) so that code is not great...
